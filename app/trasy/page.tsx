@@ -1,6 +1,6 @@
-import Header from "../../components/Header"
-import Link from "next/link";
 
+import Link from "next/link";
+import Header from "../../components/Header";
 export default function TrasyPage() {
   return (
     <main className="min-h-screen bg-white text-black">
@@ -9,15 +9,15 @@ export default function TrasyPage() {
       <section className="mx-auto max-w-[900px] px-4 pt-8 pb-12">
         <div className="border border-black/10">
           <div className="px-5 py-10 text-center">
-            <h1 className="display-font text-[22px] sm:text-[30px]">
-              Trasy i propozycje
-            </h1>
+            <h1 className="heading-font tracking-[0.20em] text-[22px] sm:text-[30px]">
+  Trasy i propozycje
+</h1>
 
-            <p className="mt-6 text-[14px] leading-8 text-black/70">
+            <p className="mt-6 text-[14px] leading-8 text-black/60">
               Wybierz gotową trasę albo ułóżmy plan pod Ciebie. Poniżej 3 najczęstsze opcje.
             </p>
 
-            <div className="mt-8 grid gap-6 text-left">
+            <div className="mt-8 grid gap-6 text-left text-black/60">
               <Box
                 title="Lizbona — klasyki i perełki"
                 meta="4–6h / 1 dzień"

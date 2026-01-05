@@ -19,7 +19,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black">
       <Header />
-      
       {/* Mobile-first centered hero */}
       <section className="mx-auto max-w-[900px] px-4 pt-8">
         <div className="border border-black/10">
@@ -27,11 +26,11 @@ export default function Home() {
           <div className="w-full bg-black/5" style={{ height: "45vh", minHeight: 280 }} />
 
           <div className="px-5 py-8 text-center">
-           <h1 className="display-font text-[18px] sm:text-[28px] text-center">
+           <h1 className="heading-font tracking-[0.22em] text-[18px] sm:text-[28px] text-center">
             Portugalia bez chaosu
             </h1>
 
-            <p className="mt-5 text-[14px] leading-7 text-black/70">
+            <p className="mt-5 text-[14px] leading-7 text-black/60">
               Prywatne zwiedzanie po polsku: Lizbona, Sintra, Porto i Algarve.
               Spokojne tempo, piękne miejsca, dobra logistyka.
             </p>
@@ -94,7 +93,7 @@ export default function Home() {
                   Wyślij
                 </button>
 
-                <p className="text-[12px] text-black/50 leading-6">
+                <p className="mt-1 text-[11px] tracking-[0.22em] uppercase text-black/55">
                   Dane wykorzystam wyłącznie do kontaktu w sprawie wycieczki.
                 </p>
               </form>

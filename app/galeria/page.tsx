@@ -8,9 +8,9 @@ export default function GaleriaPage() {
       <section className="mx-auto max-w-[900px] px-4 pt-8 pb-12">
         <div className="border border-black/10">
           <div className="px-5 py-10 text-center">
-            <h1 className="display-font text-[22px] sm:text-[30px]">Galeria</h1>
+            <h1 className="heading-font tracking-[0.20em] text-[22px] sm:text-[30px]">Galeria</h1>
 
-            <p className="mt-5 text-[14px] leading-7 text-black/70">
+            <p className="mt-5 text-[14px] leading-7 text-black/60">
               Dodajemy tu zdjęcia, które budują klimat: tramwaje, uliczki, ocean, Sintra i Porto.
             </p>
 

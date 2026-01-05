@@ -8,24 +8,48 @@
   
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
+
 /* Body text stays Courier */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Courier New", Courier, monospace;
+
+  font-family:
+    "Courier PS Cyrillic",
+    "Courier New",
+    Courier,
+    monospace;
 }
 
 /* Brand heading font (set by next/font in layout.tsx) */
 .heading-font {
-  font-family: var(--font-heading);
+  font-family: "Montserrat", sans-serif !important;
   text-transform: uppercase;
   letter-spacing: clamp(0.14em, 1.2vw, 0.32em);
   font-weight: 900;
 }
 
-/* Big headline font (same font, not forced uppercase) */
+p,
+span {
+  text-transform: uppercase;
+}
+
 .display-font {
-  font-family: var(--font-heading);
   letter-spacing: 0.10em;
   font-weight: 900;
+
+/* AUTOMATIC heading font */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+}
+
 }
