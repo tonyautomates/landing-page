@@ -4,12 +4,13 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    // Change these to match your form fields
     const name = String(data.name || "").trim();
     const email = String(data.email || "").trim();
+    const cityRoute = String(data.cityRoute || "").trim();
+    const date = String(data.date || "").trim();
     const message = String(data.message || "").trim();
 
-    if (!name || !email || !message) {
+    if (!name || !email) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -29,6 +30,8 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         name,
         email,
+        cityRoute,
+        date,
         message,
         page: data.page ?? null,
         createdAt: new Date().toISOString(),
