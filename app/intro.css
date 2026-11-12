@@ -1,0 +1,280 @@
+/*
+  Intro animation. Markup: components/Intro.tsx. Photos: components/introPhotos.ts.
+
+  The four boxes never move, turn or change size. Only what is inside them
+  changes, and then they fade into the name.
+
+  Timeline (seconds from first paint):
+    0.10  the four boxes fade in, one after another, clockwise
+    0.65  the photos flash: all four boxes change together, 7 times,
+          every 0.22 s
+    2.20  the boxes fade out, one after another, clockwise
+    2.40  a line draws out from the centre
+    2.52  the name rises out of the line, the subtitle drops below it
+    3.75  the white sheet lifts and the page rises with it (ends 4.55)
+
+  The overlay removes itself when its own exit animation ends.
+*/
+
+.intro {
+  --s: clamp(128px, 26vmin, 236px); /* box size */
+  --g: calc(var(--s) * 0.06); /* gap between boxes */
+  --step: calc(var(--s) + var(--g));
+  --ink: #111111;
+  --arrive: cubic-bezier(0.16, 1, 0.3, 1);
+  --curtain: cubic-bezier(0.76, 0, 0.24, 1);
+
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  place-items: center;
+  overflow: hidden;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+html[data-intro="play"] .intro,
+html[data-intro="skip"] .intro {
+  display: grid;
+}
+html[data-intro="play"] .intro {
+  animation: intro-exit 0.8s var(--curtain) 3.75s forwards;
+}
+html[data-intro="skip"] .intro {
+  animation: intro-skip 0.4s ease forwards;
+}
+
+/* Held while the tab is in the background (set by the script in layout.tsx). */
+html[data-intro-paused] .intro,
+html[data-intro-paused] .intro *,
+html[data-intro-paused] .intro-page {
+  animation-play-state: paused !important;
+}
+
+/* The content lags behind the lifting sheet. */
+.intro-stage {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+html[data-intro="play"] .intro-stage {
+  animation: intro-stage-lag 0.8s var(--curtain) 3.75s forwards;
+}
+
+/* ── The four boxes ───────────────────────────────────────── */
+
+.intro-grid {
+  grid-area: 1 / 1;
+  position: relative;
+  width: calc(2 * var(--s) + var(--g));
+  aspect-ratio: 1;
+}
+
+.intro-box {
+  position: absolute;
+  left: calc(var(--c) * var(--step));
+  top: calc(var(--r) * var(--step));
+  width: var(--s);
+  height: var(--s);
+  overflow: hidden;
+  opacity: 0;
+  animation:
+    intro-fade-in 0.4s ease calc(0.1s + var(--i) * 0.06s) forwards,
+    intro-fade-out 0.4s ease calc(2.2s + var(--i) * 0.06s) forwards;
+}
+
+/* A photo slot. The slots of a box are stacked; each one flashes on over
+   the one before it. The first is there from the start. */
+.intro-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: intro-fade-in 0.1s linear calc(0.43s + var(--k) * 0.22s) forwards;
+}
+.intro-photo:first-child {
+  opacity: 1;
+  animation: none;
+}
+/* Soft light on the empty slots so they read as surfaces, not flat fills. */
+.intro-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0) 55%,
+    rgba(0, 0, 0, 0.05)
+  );
+}
+.intro-photo[data-filled]::before {
+  content: none;
+}
+
+.intro-photo-label {
+  position: absolute;
+  left: 0.9em;
+  right: 0.9em;
+  bottom: 0.8em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: clamp(8px, 1.1vmin, 10px);
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  color: rgba(17, 17, 17, 0.5);
+}
+
+/* ── The name ─────────────────────────────────────────────── */
+
+/* The block is lifted by half its height so the line sits at the centre. */
+.intro-title {
+  grid-area: 1 / 1;
+  position: relative;
+  width: max-content;
+  translate: 0 -50%;
+}
+
+.intro-name-mask {
+  overflow: hidden;
+}
+.intro-name {
+  --track: 0.16em;
+  display: flex;
+  white-space: nowrap;
+  /* Left padding balances the tracking after the last letter. Top padding
+     leaves room for the tilde on the Ã inside the mask. */
+  padding: 0.22em 0 0.34em var(--track);
+  font-family: var(--font-heading), "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 7.4vw, 4.75rem);
+  line-height: 1.1;
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+}
+/* Starts far enough down that the tilde of the Ã, which reaches above the
+   letter box, is also below the mask. */
+.intro-name span {
+  display: block;
+  translate: 0 175%;
+  animation: intro-rise 0.8s var(--arrive) calc(2.52s + var(--n) * 0.012s)
+    forwards;
+}
+.intro-name .intro-space {
+  width: 0.42em;
+}
+
+.intro-line {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  translate: -50% 50%;
+  background: var(--ink);
+  animation: intro-line-grow 0.7s var(--curtain) 2.4s forwards;
+}
+
+.intro-sub-mask {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: max-content;
+  translate: -50% 0;
+  overflow: hidden;
+}
+.intro-sub {
+  padding: 1.5em 0 0.3em 0.22em;
+  font-size: clamp(9px, 2.6vw, 11px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(17, 17, 17, 0.55);
+  translate: 0 -110%;
+  animation: intro-rise 0.7s var(--arrive) 2.85s forwards;
+}
+
+/* ── Skip ─────────────────────────────────────────────────── */
+
+.intro-skip {
+  position: absolute;
+  right: clamp(12px, 3vw, 32px);
+  bottom: clamp(12px, 3vw, 32px);
+  padding: 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(17, 17, 17, 0.4);
+  cursor: pointer;
+  opacity: 0;
+  animation:
+    intro-fade-in 0.5s ease 0.8s forwards,
+    intro-fade-out 0.3s ease 3.4s forwards;
+}
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--ink);
+}
+
+/* ── The page underneath ──────────────────────────────────── */
+
+/* The clip stops the shifted page from adding a scrollbar while it waits. */
+html[data-intro="play"] .intro-page-clip {
+  overflow: clip;
+}
+html[data-intro="play"] .intro-page {
+  animation: intro-page-rise 0.75s var(--curtain) 3.75s backwards;
+}
+
+/* ── Keyframes ────────────────────────────────────────────── */
+
+@keyframes intro-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes intro-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes intro-line-grow {
+  to {
+    width: 100%;
+  }
+}
+@keyframes intro-rise {
+  to {
+    translate: 0 0;
+  }
+}
+@keyframes intro-exit {
+  to {
+    translate: 0 -100%;
+    visibility: hidden;
+  }
+}
+@keyframes intro-stage-lag {
+  to {
+    translate: 0 30vh;
+  }
+}
+@keyframes intro-skip {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes intro-page-rise {
+  from {
+    translate: 0 72px;
+  }
+}

@@ -25,7 +25,7 @@ export default function Header() {
     <div className="heading-font whitespace-nowrap
                     text-[13px] sm:text-[18px] md:text-[20px]
                     tracking-[0.18em]">
-      PORTUGLIA INACZEJ
+      PORTUGALIA INACZEJ
     </div>
 
     {/* Subtitle hidden on mobile */}
